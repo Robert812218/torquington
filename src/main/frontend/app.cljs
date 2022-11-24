@@ -2,16 +2,23 @@
   (:require [reagent.core :as r]
             [reagent.dom :as rdom]))
 
-(defn simple-component []
+(def click-count (r/atom 0))
+
+(defn counting-component []
   [:div
-   [:p "I am a component!"]
-   [:p.someclass
-    "I have " [:strong "bold"]
-    [:span {:style {:color "red"}} " and red "] "text."]])
+   "The atom " [:code "click-count"] " has value: "
+   @click-count ". "
+   [:input {:type "button" :value "Click me!"
+            :on-click #(swap! click-count inc)}]])
+;; Init Stuff
 
-
-(defn init []
+(defn ^:dev/after-load start []
   (rdom/render
-   [simple-component]
+   [counting-component]
    (.-body js/document)))
 
+(defn init []
+  (start))
+
+(defn ^:dev/before-load stop []
+  (js/console.log "stop"))
