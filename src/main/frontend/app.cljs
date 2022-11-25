@@ -2,19 +2,22 @@
   (:require [reagent.core :as r]
             [reagent.dom :as rdom]))
 
-(def click-count (r/atom 0))
+(defn atom-input [value]
+  [:input {:type "text"
+           :value @value
+           :on-change #(reset! value (-> % .-target .-value))}])
 
-(defn counting-component []
-  [:div
-   "The atom " [:code "click-count"] " has value: "
-   @click-count ". "
-   [:input {:type "button" :value "Click me!"
-            :on-click #(swap! click-count inc)}]])
-;; Init Stuff
+(defn shared-state []
+  (let [val (r/atom "foo")]
+    (fn []
+      [:div
+        [:p "The value is now: " @val]
+        [:p "Change it here: " [atom-input val]]])))
+
 
 (defn ^:dev/after-load start []
   (rdom/render
-   [counting-component]
+    [shared-state]
    (.-body js/document)))
 
 (defn init []
@@ -22,3 +25,5 @@
 
 (defn ^:dev/before-load stop []
   (js/console.log "stop"))
+
+
