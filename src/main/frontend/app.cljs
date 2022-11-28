@@ -1,24 +1,57 @@
 (ns frontend.app
   (:require [reagent.core :as r]
-            [reagent.dom :as rdom]))
+            [reagent.dom :as rdom]
+	    [clojure.string :as str]))
 
-(defn atom-input [value]
-  [:input {:type "text"
-           :value @value
-           :on-change #(reset! value (-> % .-target .-value))}])
+(defn text-1 []
+	[:div
+		[:p "This is the attention building efficiency man protocol bananza application machine (for your brain (TM(!))"]
+		[:p "How bunged up is your brain compartment rn?"]])
 
-(defn shared-state []
-  (let [val (r/atom "foo")]
-    (fn []
-      [:div
-        [:p "The value is now: " @val]
-        [:p "Change it here: " [atom-input val]]])))
+(defn language-select []
+	[:div
+		[:h3 "What language do you want to learn?"
+			[:button "French"]
+			[:button "Spanish"]
+			[:button "German"]
+			[:button "Portugese"]
+			[:button "Mandarin"]
+		]
+		[:h3 ""]
+		])
+(defn create-account []
+	[:div
+		[:input {:type "text"}]])
+
+(defn login []
+	[:div
+		[:input "assdasd" {:type "text"}]])
+
+(defn account-section []
+	[:div {:style {:display :flex
+				:flex-direction :column
+				:width :20vw}} 
+		[:h4 {:style {:class :account-header}}
+		"Account"]
+		[:div
+			[:button "Create Account"]
+			[:button "Login"]
+			[:button "Settings"]
+		]])
+
+(defn front-page []
+	[:div
+
+		[account-section]
+		[text-1]
+		[language-select]
+		])
 
 
 (defn ^:dev/after-load start []
-  (rdom/render
-    [shared-state]
-   (.-body js/document)))
+	(rdom/render
+		[front-page]
+	(.-body js/document)))
 
 (defn init []
   (start))
